@@ -1,0 +1,33 @@
+{
+  "name": "nse-stock-analysis-backend",
+  "version": "1.0.0",
+  "description": "API's for nse stock analysis",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcrypt": "5.0.1",
+    "body-parser": "1.20.0",
+    "cors": "2.8.5",
+    "csv-parse": "5.1.0",
+    "dotenv": "16.0.1",
+    "express": "4.18.1",
+    "express-fileupload": "1.4.0",
+    "jsonwebtoken": "8.5.1",
+    "lodash": "4.17.21",
+    "moment": "2.29.3",
+    "mongoose": "6.3.4"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.16"
+  },
+  "keywords": [
+    "node",
+    "mongodb",
+    "nse-stock"
+  ],
+  "author": "Swarnjeet Singh",
+  "license": "ISC"
+}
