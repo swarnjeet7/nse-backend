@@ -4,10 +4,23 @@ const app = express();
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const helpers = require("./utilities/helper");
+const cors = require("cors");
 require("dotenv").config();
+
+var whitelist = ["http://localhost:3000", "https://nse.itechmantra.com"];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
 
 // Middleware
 app.use(
+  cors(corsOptions),
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",

@@ -5,6 +5,21 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const helpers = require("../utilities/helper");
 
+router.delete("/", helpers.verifyToken, function (req, res) {
+  try {
+    User.find({}, (err, docs) => {
+      if (err) throw err;
+      docs.delete();
+      res.json({
+        status: 200,
+        message: `User has been deleted successfully`,
+      });
+    });
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
 router.get("/all", helpers.verifyToken, function (req, res) {
   try {
     User.find({}, (err, docs) => {
@@ -49,6 +64,7 @@ router.post("/login", function (req, res) {
           res.json({
             login: true,
             status: 200,
+            UserType,
             message: "You have logged in successfully.",
             token,
           });
@@ -88,7 +104,7 @@ router.post("/create", helpers.verifyToken, function (req, res) {
       .catch((err) => {
         res.json({
           message: `Username ${UserName} has already existed. Please try another username`,
-          status: 200,
+          status: 400,
         });
       });
   } catch (err) {

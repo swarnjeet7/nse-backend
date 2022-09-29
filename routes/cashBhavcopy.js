@@ -17,6 +17,7 @@ router.get("/bhavcopy", function (req, res) {
       Portfolio,
       Symbol,
     } = req.query;
+
     const filter = {
       $gte: new Date(from),
       $lt: new Date(to),
@@ -56,6 +57,7 @@ router.get("/bhavcopy", function (req, res) {
     } else {
       Cash.find(filter, (err, data) => {
         if (err) throw err;
+
         res.json({
           status: 200,
           message: "Success",
