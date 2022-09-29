@@ -4,7 +4,8 @@
   "description": "API's for nse stock analysis",
   "main": "index.js",
   "engines": {
-    "node": "14.18.1"
+    "node": "14.18.1",
+    "npm": "6.14.15"
   },
   "scripts": {
     "start": "node index.js",
