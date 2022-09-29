@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "API's for nse stock analysis",
   "main": "index.js",
+  "engines": {
+    "node": "14.18.1"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
