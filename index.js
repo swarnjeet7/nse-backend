@@ -9,6 +9,7 @@ require("dotenv").config();
 
 var whitelist = ["http://localhost:3000", "https://nse.itechmantra.com"];
 var corsOptions = {
+  credentials: true,
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
