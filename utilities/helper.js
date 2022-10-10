@@ -4,7 +4,8 @@ const _ = require("lodash");
 module.exports = {
   verifyToken: (req, res, next) => {
     let token = req.headers.authorization;
-    if (req.headers.cookie) {
+
+    if (!token && req.headers.cookie) {
       const cookies = {};
       const cookiesString = req.headers.cookie;
       const cookiesArray = cookiesString.split(";");

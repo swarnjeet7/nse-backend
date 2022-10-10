@@ -7,24 +7,24 @@ const helpers = require("./utilities/helper");
 const cors = require("cors");
 require("dotenv").config();
 
-// var whitelist = [
-//   "http://localhost:3000",
-//   "http://localhost:3006",
-//   "https://nse.itechmantra.com",
-// ];
-// var corsOptions = {
-//   credentials: true,
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// };
+var whitelist = [
+  "http://localhost:3000",
+  "http://localhost:3006",
+  "https://nse.itechmantra.com",
+];
+var corsOptions = {
+  credentials: true,
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://nse.itechmantra.com");
+  // res.header("Access-Control-Allow-Origin", "https://nse.itechmantra.com");
   res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Methods",
@@ -39,6 +39,7 @@ app.use((req, res, next) => {
 
 // Middleware
 app.use(
+  cors(corsOptions),
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
