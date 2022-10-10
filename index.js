@@ -24,8 +24,8 @@ require("dotenv").config();
 // };
 
 app.use((req, res, next) => {
-  // allow access
   res.header("Access-Control-Allow-Origin", "https://nse.itechmantra.com");
+  res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Methods",
     "GET, PUT, POST, PATCH, DELETE, OPTIONS"
