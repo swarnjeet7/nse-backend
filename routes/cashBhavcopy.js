@@ -120,7 +120,11 @@ router.get("/top", function (req, res) {
     .sort({ Profit: order })
     .limit(count)
     .exec((err, docs) => {
-      res.json(docs);
+      res.json({
+        status: 200,
+        message: "success",
+        data: docs,
+      });
     });
 });
 

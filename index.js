@@ -11,6 +11,7 @@ var whitelist = [
   "http://localhost:3000",
   "http://localhost:3006",
   "https://nse.itechmantra.com",
+  "https://swarnjeet7.github.io/",
 ];
 var corsOptions = {
   credentials: true,
