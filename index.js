@@ -25,7 +25,7 @@ var corsOptions = {
 };
 
 app.use((req, res, next) => {
-  // res.header("Access-Control-Allow-Origin", "https://nse.itechmantra.com");
+  res.header("Access-Control-Allow-Origin", "https://swarnjeet7.github.io");
   res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Methods",
