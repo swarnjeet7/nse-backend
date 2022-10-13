@@ -30,7 +30,11 @@ router.get("/bhavcopy", function (req, res) {
     FO.find(filter, function (err, docs) {
       if (err) throw err;
 
-      res.json(docs);
+      res.json({
+        status: 200,
+        message: 'success',
+        data: docs
+      });
     });
   } catch (err) {
     res.json({ message: err.message });

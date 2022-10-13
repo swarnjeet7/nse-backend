@@ -17,7 +17,7 @@ module.exports = {
     }
 
     const errorMessage = {
-      status: 403,
+      status: 401,
       message:
         "You are not authorised to access the page or your token has been expired.",
     };
