@@ -8,7 +8,7 @@ const helpers = require("../utilities/helper");
 router.delete("/", helpers.verifyToken, function (req, res) {
   const { UserName } = req.body;
   try {
-    User.findOneAndDelete({UserName: UserName}, (err, user) => {
+    User.findOneAndDelete({ UserName: UserName }, (err, user) => {
       if (err) throw err;
 
       res.json({
@@ -37,50 +37,53 @@ router.get("/all", helpers.verifyToken, function (req, res) {
   }
 });
 
-router.post("/login", function (req, res) {
+router.post("/login", async function (req, res) {
   const { UserName, Password } = req.body;
 
   try {
-    User.findOne({ UserName: UserName.toLowerCase() }, function (err, user) {
-      if (err) throw err;
+    const user = await User.findOne({ UserName: UserName.toLowerCase() });
 
-      if (!user) {
-        return res.json({
-          status: 403,
-          message: `Username: ${UserName} not exist`,
-        });
-      }
-
-      // test a matching password
-      user.comparePassword(Password, function (err, isMatch) {
-        if (err) throw err;
-
-        const { UserName, UserType, FullName } = user;
-        const payload = {
-          UserName,
-          UserType,
-          FullName,
-        };
-        const token = jwt.sign(payload, process.env.SECRET_CODE);
-        if (isMatch) {
-          res.json({
-            login: true,
-            status: 200,
-            UserType,
-            message: "You have logged in successfully.",
-            token,
-          });
-        } else {
-          res.json({
-            login: true,
-            status: 403,
-            message: "Password does not match.",
-          });
-        }
+    if (!user) {
+      return res.json({
+        status: 403,
+        message: `Username: ${UserName} does not exist`,
       });
-    });
+    }
+
+    const isMatch = await user.comparePassword(Password, (err, isMatch) => {
+      if (err) throw err;
+      // continue with login logic
+    }); // assuming comparePassword returns a Promise
+
+    const { UserName: name, UserType, FullName } = user;
+    const payload = {
+      UserName: name,
+      UserType,
+      FullName,
+    };
+
+    if (isMatch) {
+      const token = jwt.sign(payload, process.env.SECRET_CODE);
+      return res.json({
+        login: true,
+        status: 200,
+        UserType,
+        message: "You have logged in successfully.",
+        token,
+      });
+    } else {
+      return res.json({
+        login: true,
+        status: 403,
+        message: "Password does not match.",
+      });
+    }
   } catch (err) {
-    res.json({ message: err.message });
+    console.error("Login error:", err);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+    });
   }
 });
 

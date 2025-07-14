@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 // Middleware
 app.use(
-  // cors(corsOptions),
+  cors(corsOptions),
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
@@ -67,13 +67,20 @@ app.use("/portfolioScript", helpers.verifyToken, portfolioScript);
 app.use("/user", users);
 app.use("/symbols", symbols);
 
-mongoose.connect(
-  process.env.DB_CONNECTION_URL,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    console.log("db connected");
+async function connectDB() {
+  try {
+    await mongoose.connect(process.env.DB_CONNECTION_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB connected");
+  } catch (err) {
+    console.error("❌ MongoDB connection error:", err);
   }
-);
+}
+
+connectDB();
+
 
 //to set the port export PORT=5000;
 const port = process.env.PORT || 8080;
