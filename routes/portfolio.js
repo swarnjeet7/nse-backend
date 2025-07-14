@@ -22,7 +22,15 @@ router.delete("/", function (req, res) {
   const { Portfolio } = req.body;
   try {
     PortfolioModal.findOneAndDelete({ Portfolio }, function (err, portfolio) {
-      if (err) throw err;
+
+      if(err) {
+        throw err;
+        return res.json({
+          status: 404,
+          message: "Portfolio has not been found",
+          portfolio,
+        });
+      }
 
       res.json({
         status: 200,

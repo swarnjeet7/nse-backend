@@ -7,8 +7,6 @@ const Cash = require("../models/Cash");
 const PortfolioScript = require("../models/PortfolioScript");
 const moment = require("moment");
 
-function CashQuery(filter) {}
-
 router.get("/bhavcopy", function (req, res) {
   try {
     const {
@@ -16,11 +14,15 @@ router.get("/bhavcopy", function (req, res) {
       to = moment(new Date(from)).add(1, "days").format("MM/DD/yyyy"),
       Portfolio,
       Symbol,
+      top = 100,
+      skip = 0,
     } = req.query;
 
     const filter = {
-      $gte: new Date(from),
-      $lt: new Date(to),
+      Timestamp: {
+        $gte: new Date(from),
+        $lte: new Date(to),
+      },
     };
 
     if (Symbol) {
@@ -40,8 +42,10 @@ router.get("/bhavcopy", function (req, res) {
 
         Cash.find(
           {
-            $gte: new Date(from),
-            $lt: new Date(to),
+            Timestamp: {
+              $gte: new Date(from),
+              $lt: new Date(to),
+            },
             Symbol: { $in: [...script.Scripts] },
           },
           (err, data) => {
@@ -52,7 +56,9 @@ router.get("/bhavcopy", function (req, res) {
               data,
             });
           }
-        );
+        )
+          .limit(top)
+          .skip(skip);
       });
     } else {
       Cash.find(filter, (err, data) => {
@@ -63,7 +69,9 @@ router.get("/bhavcopy", function (req, res) {
           message: "Success",
           data,
         });
-      });
+      })
+        .limit(top)
+        .skip(skip);
     }
   } catch (err) {
     res.json({ message: err.message });
@@ -95,7 +103,7 @@ router.post("/bhavcopy", function (req, res) {
         cash.save();
       });
 
-    res.status(200).send({
+    res.send({
       status: 200,
       message: "The data has been updated successfully",
     });
@@ -114,12 +122,16 @@ router.get("/top", function (req, res) {
   const order = _.lowerCase(type) === "gainers" ? "desc" : "asc";
 
   Cash.find({
-    $gte: new Date(date),
-    $lt: new Date(endDate),
+    Timestamp: {
+      $gte: new Date(date),
+      $lt: new Date(endDate),
+    },
   })
     .sort({ Profit: order })
     .limit(count)
     .exec((err, docs) => {
+      if (err) throw err;
+
       res.json({
         status: 200,
         message: "success",

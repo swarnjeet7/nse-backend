@@ -22,6 +22,22 @@ router.get("/", function (req, res) {
   }
 });
 
+router.get("/top", function (req, res) {
+  try {
+    PortfolioScript.find({}, function (err, data) {
+      if (err) throw err;
+      
+      res.json({
+        status: 200,
+        message: "success",
+        data,
+      });
+    }).limit(1);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+});
+
 router.post("/", function (req, res) {
   const { Portfolio, Scripts } = req.body;
 
@@ -53,18 +69,19 @@ router.post("/", function (req, res) {
 });
 
 router.patch("/", function (req, res) {
-  const { Name, Scripts } = req.body;
-
+  const { Portfolio, Scripts } = req.body;
   try {
-    PortfolioScript.findOne({ Name }).exec((err, script) => {
+    PortfolioScript.findOne({ Portfolio }).exec((err, script) => {
       if (err) throw err;
+
       if (!script) {
         return res.status(400).send({
           message: `The portfolio script not found`,
         });
       }
-      if (Name) {
-        script.Name = Name;
+
+      if (Portfolio) {
+        script.Portfolio = Portfolio;
       }
       if (Scripts) {
         script.Scripts = Scripts;

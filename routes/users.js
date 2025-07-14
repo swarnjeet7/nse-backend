@@ -6,12 +6,14 @@ const jwt = require("jsonwebtoken");
 const helpers = require("../utilities/helper");
 
 router.delete("/", helpers.verifyToken, function (req, res) {
+  const { UserName } = req.body;
   try {
-    User.find({}, (err, docs) => {
+    User.findOneAndDelete({UserName: UserName}, (err, user) => {
       if (err) throw err;
-      docs.delete();
+
       res.json({
         status: 200,
+        user: user,
         message: `User has been deleted successfully`,
       });
     });

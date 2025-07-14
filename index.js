@@ -8,11 +8,10 @@ const cors = require("cors");
 require("dotenv").config();
 
 var whitelist = [
+  "http://localhost:8080",
   "http://localhost:3000",
-  "http://localhost:3006",
-  "https://nse.itechmantra.com",
-  "https://swarnjeet7.github.io",
 ];
+
 var corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
@@ -25,7 +24,7 @@ var corsOptions = {
 };
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://nse.itechmantra.com/");
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Methods",
@@ -40,13 +39,13 @@ app.use((req, res, next) => {
 
 // Middleware
 app.use(
-  cors(corsOptions),
+  // cors(corsOptions),
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
-  })
+  }),
+  bodyParser.json()
 );
-app.use(bodyParser.json());
 
 const cashBhavcopy = require("./routes/cashBhavcopy");
 const foBhavcopy = require("./routes/foBhavcopy");
@@ -54,7 +53,7 @@ const portfolio = require("./routes/portfolio");
 const portfolioScript = require("./routes/portfolioScript");
 const users = require("./routes/users");
 const pivots = require("./routes/pivots");
-const simbols = require("./routes/symbols");
+const symbols = require("./routes/symbols");
 
 app.get("/", function (req, res) {
   res.send("App working");
@@ -66,7 +65,7 @@ app.use("/portfolio", helpers.verifyToken, portfolio);
 app.use("/pivots", helpers.verifyToken, pivots);
 app.use("/portfolioScript", helpers.verifyToken, portfolioScript);
 app.use("/user", users);
-app.use("/symbols", simbols);
+app.use("/symbols", symbols);
 
 mongoose.connect(
   process.env.DB_CONNECTION_URL,
